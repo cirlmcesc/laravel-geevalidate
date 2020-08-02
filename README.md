@@ -1,81 +1,38 @@
-# Laravel Hashids
+# Laravel Gee Validate
 
 TL;DR
 -----
-Do not explicitly display the ID of the data in the interface or URI. Use the Trail on the Model to automatically encrypt the ID, and at the same time, it will correctly decrypt the instance of the class you want to inject into the route. It also provides quick methods to encrypt and decrypt the ID when you need. It provides some commands for testing. Inspired by [vinkla/laravel-hashids](https://github.com/vinkla/laravel-hashids).
+[Geetest](https://www.geetest.com/) behavior verification package for Laravel. Inspired by [GeeTeam/gt3-server-php-laravel-sdk](https://github.com/GeeTeam/gt3-server-php-laravel-sdk/tree/master).
 
 Install
 -------
 Install via composer
 ```shell
-composer require cirlmcesc/laravel-hashids
-```
-
-Add Service Provider to `config/app.php` in `providers` section
-```php
-Cirlmcesc\LaravelMddoc\LaravelHashidsServiceProvider::class,
+composer require cirlmcesc/laravel-geevalidate
 ```
 
 **Configuration file** will be published to `config/`.
 The mode of operation can be customized by modifying parameters and attributes.
 ```shell
-php artisan hashids:install
+php artisan geevalidate:install
+```
+
+**Add middleware** to `app\Http\Kernel.php` routeMiddleware's array. 
+```php
+protected $routeMiddleware = [
+    ....
+    'geevalidate' => \Cirlmcesc\LaravelGeevalidate\Middlewares\LaravelGeevalidateMiddleware::class,
+];
 ```
 
 Usage
 -----
-**Use on Model** trait, you can use it quickly. Using trait on the model, you can quickly use it to automatically encrypt the ID when the model is serialized and the value of the field set by ```$needhashidfields```.
-```php
-<?php
+**Add middleware where you need to validate behavior**
+**The first step:** Request to register the interface to get the front-end rendering parameters.
+**The second step:** Attach three necessary parameters to the requested interface. `geevalidate_challenge, geevalidate_validate, geevalidate_seccode`
+**When verification fails** The HTTP code of 412 will be returned. You can also modified in geevalidate.error_code.
 
-namespace App;
-
-use Illuminate\Database\Eloquent\Model;
-use Cirlmcesc\LaravelHashids\Traits\Hashidsable;
-
-class Foo extends Model
-{
-    use Hashidsable;
-
-    public $needHashIdFields = [
-        'xxx_id',
-        'yyy_id',
-        'zzz_id',
-    ];
-}
-```
-
-**Use functions elsewhere** to quickly encrypt and decrypt. Some functions are provided.
-```php
-<?php
-
-use Cirlmcesc\LaravelHashids\LaravelHashids;
-
-/**
- * hashids function
- *
- * @return Hashids
- */
-function hashids(): LaravelHashids
-
-/**
- * hashidsencode function
- *
- * @param Int $id
- * @return String
- */
-function hashidsencode(Int $id): String
-
-/**
- * hashidsdecode function
- *
- * @param String $id
- * @return Int
- */
-function hashidsdecode(String $id): Int
-
-```
-**Test command** can use encryption and decryption on the command line.
-```shell
-php artisan hashids:test
-```
+Other
+-----
+You can use `LaraveGeevalidate::macro` to extend the method, and add parameters to the route to specify the verification method.
+But finally, you need to call `$this - > validate()` to confirm whether the authentication is successful.
