@@ -1,0 +1,37 @@
+{
+    "name": "cirlmcesc/laravel-geevalidate",
+    "description": "Gee validate's package for Laravel",
+    "license": "MIT",
+    "type": "laravel-package",
+    "keywords": [
+        "laravel",
+        "geetest",
+        "behavior-validate"
+    ],
+    "authors": [
+        {
+            "name": "Cirlmcesc Ma",
+            "email": "cirlmcesc_ma@163.com"
+        }
+    ],
+    "homepage": "https://github.com/cirlmcesc/laravel-geevalidate",
+    "minimum-stability": "stable",
+    "require": {
+        "php": "^7.2.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Cirlmcesc\\LaravelGeevalidate\\": "src/"
+        },
+        "files": [
+            "src/helpers.php"
+        ]
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Cirlmcesc\\LaravelGeevalidate\\Providers\\LaravelGeevalidateServiceProvider"
+            ]
+        }
+    }
+}
