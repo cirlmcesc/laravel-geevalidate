@@ -39,6 +39,12 @@ class LaravelGeevalidateServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                \Cirlmcesc\LaravelGeevalidate\Commands\InstallCommand::class,
+            ]);
+        }
+
         $this->publishes([self::CONFIG_PATH => config_path("geevalidate.php")], "geevalidate-config");
 
         $this->loadRoutesFrom(self::ROUTE_PATH);
