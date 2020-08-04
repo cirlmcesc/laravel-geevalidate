@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands;
+namespace Cirlmcesc\LaravelGeevalidate\Commands;
 
 use Illuminate\Console\Command;
 

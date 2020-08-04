@@ -8,6 +8,13 @@ use Cirlmcesc\LaravelGeevalidate\Geesdk\GeetestLib;
 class LaravelGeevalidateServiceProvider extends ServiceProvider
 {
     /**
+     * Indicates if loading of the provider is deferred.
+     *
+     * @var boolean
+     */
+    protected $defer = false;
+
+    /**
      * config file path
      */
     const CONFIG_PATH = __DIR__."/../../config/geevalidate.php";
@@ -24,12 +31,12 @@ class LaravelGeevalidateServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        $this->mergeConfigFrom(self::CONFIG_PATH, 'geevalidate');
+
         $this->app->singleton(GeetestLib::class,
             function () {
                 return new GeetestLib(config('geevalidate.id'), config('geevalidate.key'));
             });
-
-        $this->mergeConfigFrom(self::CONFIG_PATH, "geevalidate");
     }
 
     /**
@@ -40,9 +47,7 @@ class LaravelGeevalidateServiceProvider extends ServiceProvider
     public function boot(): void
     {
         if ($this->app->runningInConsole()) {
-            $this->commands([
-                \Cirlmcesc\LaravelGeevalidate\Commands\InstallCommand::class,
-            ]);
+            $this->commands([\Cirlmcesc\LaravelGeevalidate\Commands\InstallCommand::class]);
         }
 
         $this->publishes([self::CONFIG_PATH => config_path("geevalidate.php")], "geevalidate-config");
